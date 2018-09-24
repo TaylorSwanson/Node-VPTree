@@ -8,7 +8,7 @@ const dataset = [];
 
 console.log("Building dataset");
 
-for (var i = 0; i < 1000000; i++) {
+for (var i = 0; i < 1000; i++) {
   const buf = crypto.randomBytes(4);
   const val = buf.toString("hex");
 

@@ -38,6 +38,8 @@ Tree.prototype.find = function(search, k) {
     }
 
     if (dist < currentNode.mu + tau) {
+      tau = dist;
+
       if (currentNode.inside.length == 1) {
         resultQueue.push(currentNode.inside.data);
       } else {
