@@ -5,6 +5,6 @@ I needed a way to find similar binary data in a huge collection of data. In this
 Currently this implementation is quite rough and probably needs to be optimized a bit. The data structure exists in memory only, meaning that the dataset must be able to fit in RAM in order to work comfortably. Also, building the tree is recursive which can cause a call stack overflow when loading a large number of data points.
 
 ## Why it's cool
-When I run a sample query in a dataset of 10,000,000 binary snippets (128 bytes each), the search takes ~8ms (in memory, so that's not a really good metric). The idea is that this search performed on disk should be much faster than a full scan, since the number of lookups is smaller.
+When I run a sample query in a dataset of 10,000,000 binary snippets (128 bytes each), the search takes ~8ms (in memory, so that's not a really good metric). The idea is that this search performed on disk should be much faster than a full hamming-distance scan, since the number of lookups is smaller.
 
 It might have made more sense to use a KD-Tree, as there are more (disk-backed) implementations, but this was more fun.
