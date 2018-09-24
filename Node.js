@@ -1,10 +1,18 @@
 function Node(data) {
   this.data = data;
-  this.vp = {};
+  this.vp = null;
   this.mu = 0.0;
   this.inside = [];
   this.outside = [];
 }
+
+Node.prototype.getVP = function() {
+  return this.vp;
+};
+
+Node.prototype.getData = function() {
+  return this.data;
+};
 
 // Compare distance between buffer's bytes
 // One byte is one dimension in this space
@@ -26,40 +34,38 @@ Node.prototype.divide = function() {
   this.vp = this.data[Math.floor(this.data.length * Math.random())];
   const vpPos = this.vp.getPosition();
 
-  // console.log("Chose vp", this.vp);
-
   // We're gonna compute the average
   let totalDistance = 0;
 
-  // Find median radius for 50/50 split
+  // Find median radius for roughly equal split
   this.data.forEach((element) => {
+    if (element.getPosition() == vpPos) return;
     const pos = element.getPosition();
-    debugger;
     totalDistance += this.distance(pos, vpPos);
   });
 
-  console.log("td", totalDistance, this.data.length);
-
-  const avgDistance = totalDistance / this.data.length;
+  this.mu = totalDistance / this.data.length;
 
   // Subdivide
   this.data.forEach((element) => {
-    if (this.distance(element.getPosition(), vpPos) > avgDistance) {
+    if (element.getPosition() == vpPos) return;
+
+    if (this.distance(element.getPosition(), vpPos) > this.mu) {
       return this.outside.push(element);
     }
 
     this.inside.push(element);
   });
 
-  console.log(this.data.length, this.inside.length, this.outside.length, avgDistance);
-
   // Create nodes for inside/outside
-  this.inside = new Node(this.inside);
-  this.outside = new Node(this.outside);
-
-  // Recurse
-  this.inside.divide();
-  this.outside.divide();
+  if (this.inside.length > 0) {
+    this.inside = new Node(this.inside);
+    this.inside.divide();
+  }
+  if (this.outside.length > 0) {
+    this.outside = new Node(this.outside);
+    this.outside.divide();
+  }
 };
 
 module.exports = Node;
