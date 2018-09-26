@@ -6,8 +6,17 @@ function Tree(dataset) {
 }
 
 Tree.prototype.buildIndex = function() {
+  const splitQueue = [];
   this.root = new Node(this.dataset);
-  this.root.divide();
+  splitQueue.push(this.root);
+
+  while (splitQueue.length > 0) {
+    // console.log("sq", splitQueue.length);
+    const currentNode = splitQueue.splice(0, 1)[0];
+
+    const moreNodes = currentNode.divide();
+    splitQueue.unshift(...moreNodes);
+  }
 };
 
 Tree.prototype.find = function(search, k) {
@@ -19,8 +28,10 @@ Tree.prototype.find = function(search, k) {
   const resultQueue = new DistanceQueue(k);
   const distFn = new Node().distance;
 
+  let i = 0;
   while (searchQueue.length > 0) {
     const currentNode = searchQueue.splice(0, 1)[0];
+    i++;
 
     if (currentNode instanceof Array) continue;
 
@@ -57,8 +68,9 @@ Tree.prototype.find = function(search, k) {
       continue;
     }
 
-    // console.log("Tau", tau);
   }
+  console.log("Tau", tau);
+  console.log(`Searced ${i} nodes`);
   console.log("Found:", resultQueue.getStack());
 };
 

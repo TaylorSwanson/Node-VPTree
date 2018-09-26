@@ -58,14 +58,17 @@ Node.prototype.divide = function() {
   });
 
   // Create nodes for inside/outside
+  const tasks = [];
+
   if (this.inside.length > 0) {
     this.inside = new Node(this.inside);
-    this.inside.divide();
+    tasks.push(this.inside);
   }
   if (this.outside.length > 0) {
     this.outside = new Node(this.outside);
-    this.outside.divide();
+    tasks.push(this.outside);
   }
+  return tasks;
 };
 
 module.exports = Node;
